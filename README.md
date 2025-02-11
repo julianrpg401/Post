@@ -4,4 +4,4 @@
 
 ## Database Scheme
 
-* To create the database, execute the script found in the [script folder](Post.Backend.API/script).
+* To create the database, execute the script found in the [script folder](Post.Backend.API/script/PostScript.sql).
