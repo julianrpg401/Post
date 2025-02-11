@@ -1,0 +1,500 @@
+USE [master]
+GO
+/****** Object:  Database [Post]    Script Date: 9/02/2025 12:22:44 a. m. ******/
+CREATE DATABASE [Post]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'Post', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\Post.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'Post_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\DATA\Post_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [Post] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [Post].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [Post] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [Post] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [Post] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [Post] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [Post] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [Post] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [Post] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [Post] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [Post] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [Post] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [Post] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [Post] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [Post] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [Post] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [Post] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [Post] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [Post] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [Post] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [Post] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [Post] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [Post] SET READ_COMMITTED_SNAPSHOT ON 
+GO
+ALTER DATABASE [Post] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [Post] SET RECOVERY FULL 
+GO
+ALTER DATABASE [Post] SET  MULTI_USER 
+GO
+ALTER DATABASE [Post] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [Post] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [Post] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [Post] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [Post] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [Post] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+EXEC sys.sp_db_vardecimal_storage_format N'Post', N'ON'
+GO
+ALTER DATABASE [Post] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [Post] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [Post]
+GO
+/****** Object:  Table [dbo].[__EFMigrationsHistory]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[__EFMigrationsHistory](
+	[MigrationId] [nvarchar](150) NOT NULL,
+	[ProductVersion] [nvarchar](32) NOT NULL,
+ CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY CLUSTERED 
+(
+	[MigrationId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[categories]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[categories](
+	[categoryId] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](100) NOT NULL,
+	[description] [nvarchar](255) NOT NULL,
+ CONSTRAINT [PK_categories] PRIMARY KEY CLUSTERED 
+(
+	[categoryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[comments]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[comments](
+	[commentId] [int] IDENTITY(1,1) NOT NULL,
+	[postId] [int] NOT NULL,
+	[userId] [int] NOT NULL,
+	[commentContent] [nvarchar](max) NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_comments] PRIMARY KEY CLUSTERED 
+(
+	[commentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[postCategories]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[postCategories](
+	[postCategoryId] [int] IDENTITY(1,1) NOT NULL,
+	[postId] [int] NOT NULL,
+	[categoryId] [int] NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_postCategories] PRIMARY KEY CLUSTERED 
+(
+	[postCategoryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[postImages]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[postImages](
+	[postImageId] [int] IDENTITY(1,1) NOT NULL,
+	[postId] [int] NOT NULL,
+	[imageUrl] [nvarchar](500) NOT NULL,
+ CONSTRAINT [PK_postImages] PRIMARY KEY CLUSTERED 
+(
+	[postImageId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[posts]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[posts](
+	[postId] [int] IDENTITY(1,1) NOT NULL,
+	[userId] [int] NOT NULL,
+	[postContent] [nvarchar](max) NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_posts] PRIMARY KEY CLUSTERED 
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[postShares]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[postShares](
+	[shareId] [int] IDENTITY(1,1) NOT NULL,
+	[postId] [int] NOT NULL,
+	[userId] [int] NOT NULL,
+	[comment] [nvarchar](max) NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_postShares] PRIMARY KEY CLUSTERED 
+(
+	[shareId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[postVotes]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[postVotes](
+	[postVoteId] [int] IDENTITY(1,1) NOT NULL,
+	[postId] [int] NOT NULL,
+	[userId] [int] NOT NULL,
+	[isRelevant] [bit] NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_postVotes] PRIMARY KEY CLUSTERED 
+(
+	[postVoteId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[reactions]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[reactions](
+	[reactionId] [int] IDENTITY(1,1) NOT NULL,
+	[postId] [int] NOT NULL,
+	[userId] [int] NOT NULL,
+	[reactionTypeId] [int] NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_reactions] PRIMARY KEY CLUSTERED 
+(
+	[reactionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[reactionTypes]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[reactionTypes](
+	[reactionTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[name] [nvarchar](50) NOT NULL,
+	[iconUrl] [nvarchar](500) NOT NULL,
+ CONSTRAINT [PK_reactionTypes] PRIMARY KEY CLUSTERED 
+(
+	[reactionTypeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[userFollows]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[userFollows](
+	[userFollowId] [int] IDENTITY(1,1) NOT NULL,
+	[followerId] [int] NOT NULL,
+	[followingId] [int] NOT NULL,
+	[createdDate] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_userFollows] PRIMARY KEY CLUSTERED 
+(
+	[userFollowId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[users]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[users](
+	[userId] [int] IDENTITY(1,1) NOT NULL,
+	[userName] [nvarchar](50) NOT NULL,
+	[firstName] [nvarchar](100) NOT NULL,
+	[lastName] [nvarchar](100) NOT NULL,
+	[countryCode] [nvarchar](10) NOT NULL,
+	[phone] [nvarchar](20) NOT NULL,
+	[email] [nvarchar](255) NOT NULL,
+	[passwordHash] [nvarchar](255) NOT NULL,
+	[registrationDate] [datetime2](7) NOT NULL,
+	[profileImageUrl] [nvarchar](500) NOT NULL,
+	[coverImageUrl] [nvarchar](500) NOT NULL,
+ CONSTRAINT [PK_users] PRIMARY KEY CLUSTERED 
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_categories_name]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_categories_name] ON [dbo].[categories]
+(
+	[name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_comments_postId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_comments_postId] ON [dbo].[comments]
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_comments_userId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_comments_userId] ON [dbo].[comments]
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postCategories_categoryId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postCategories_categoryId] ON [dbo].[postCategories]
+(
+	[categoryId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postCategories_postId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postCategories_postId] ON [dbo].[postCategories]
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postImages_postId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postImages_postId] ON [dbo].[postImages]
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_posts_userId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_posts_userId] ON [dbo].[posts]
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postShares_postId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postShares_postId] ON [dbo].[postShares]
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postShares_userId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postShares_userId] ON [dbo].[postShares]
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postVotes_postId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postVotes_postId] ON [dbo].[postVotes]
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_postVotes_userId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_postVotes_userId] ON [dbo].[postVotes]
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_reactions_postId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_reactions_postId] ON [dbo].[reactions]
+(
+	[postId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_reactions_reactionTypeId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_reactions_reactionTypeId] ON [dbo].[reactions]
+(
+	[reactionTypeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_reactions_userId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_reactions_userId] ON [dbo].[reactions]
+(
+	[userId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_userFollows_followerId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_userFollows_followerId] ON [dbo].[userFollows]
+(
+	[followerId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_userFollows_followingId]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE NONCLUSTERED INDEX [IX_userFollows_followingId] ON [dbo].[userFollows]
+(
+	[followingId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_users_email]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_users_email] ON [dbo].[users]
+(
+	[email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [IX_users_userName]    Script Date: 9/02/2025 12:22:45 a. m. ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_users_userName] ON [dbo].[users]
+(
+	[userName] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[comments] ADD  DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[postCategories] ADD  DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[posts] ADD  DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[postShares] ADD  DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[postVotes] ADD  DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[reactions] ADD  DEFAULT (getdate()) FOR [createdDate]
+GO
+ALTER TABLE [dbo].[users] ADD  DEFAULT (getdate()) FOR [registrationDate]
+GO
+ALTER TABLE [dbo].[comments]  WITH CHECK ADD  CONSTRAINT [FK_comments_posts_postId] FOREIGN KEY([postId])
+REFERENCES [dbo].[posts] ([postId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [FK_comments_posts_postId]
+GO
+ALTER TABLE [dbo].[comments]  WITH CHECK ADD  CONSTRAINT [FK_comments_users_userId] FOREIGN KEY([userId])
+REFERENCES [dbo].[users] ([userId])
+GO
+ALTER TABLE [dbo].[comments] CHECK CONSTRAINT [FK_comments_users_userId]
+GO
+ALTER TABLE [dbo].[postCategories]  WITH CHECK ADD  CONSTRAINT [FK_postCategories_categories_categoryId] FOREIGN KEY([categoryId])
+REFERENCES [dbo].[categories] ([categoryId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[postCategories] CHECK CONSTRAINT [FK_postCategories_categories_categoryId]
+GO
+ALTER TABLE [dbo].[postCategories]  WITH CHECK ADD  CONSTRAINT [FK_postCategories_posts_postId] FOREIGN KEY([postId])
+REFERENCES [dbo].[posts] ([postId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[postCategories] CHECK CONSTRAINT [FK_postCategories_posts_postId]
+GO
+ALTER TABLE [dbo].[postImages]  WITH CHECK ADD  CONSTRAINT [FK_postImages_posts_postId] FOREIGN KEY([postId])
+REFERENCES [dbo].[posts] ([postId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[postImages] CHECK CONSTRAINT [FK_postImages_posts_postId]
+GO
+ALTER TABLE [dbo].[posts]  WITH CHECK ADD  CONSTRAINT [FK_posts_users_userId] FOREIGN KEY([userId])
+REFERENCES [dbo].[users] ([userId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[posts] CHECK CONSTRAINT [FK_posts_users_userId]
+GO
+ALTER TABLE [dbo].[postShares]  WITH CHECK ADD  CONSTRAINT [FK_postShares_posts_postId] FOREIGN KEY([postId])
+REFERENCES [dbo].[posts] ([postId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[postShares] CHECK CONSTRAINT [FK_postShares_posts_postId]
+GO
+ALTER TABLE [dbo].[postShares]  WITH CHECK ADD  CONSTRAINT [FK_postShares_users_userId] FOREIGN KEY([userId])
+REFERENCES [dbo].[users] ([userId])
+GO
+ALTER TABLE [dbo].[postShares] CHECK CONSTRAINT [FK_postShares_users_userId]
+GO
+ALTER TABLE [dbo].[postVotes]  WITH CHECK ADD  CONSTRAINT [FK_postVotes_posts_postId] FOREIGN KEY([postId])
+REFERENCES [dbo].[posts] ([postId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[postVotes] CHECK CONSTRAINT [FK_postVotes_posts_postId]
+GO
+ALTER TABLE [dbo].[postVotes]  WITH CHECK ADD  CONSTRAINT [FK_postVotes_users_userId] FOREIGN KEY([userId])
+REFERENCES [dbo].[users] ([userId])
+GO
+ALTER TABLE [dbo].[postVotes] CHECK CONSTRAINT [FK_postVotes_users_userId]
+GO
+ALTER TABLE [dbo].[reactions]  WITH CHECK ADD  CONSTRAINT [FK_reactions_posts_postId] FOREIGN KEY([postId])
+REFERENCES [dbo].[posts] ([postId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[reactions] CHECK CONSTRAINT [FK_reactions_posts_postId]
+GO
+ALTER TABLE [dbo].[reactions]  WITH CHECK ADD  CONSTRAINT [FK_reactions_reactionTypes_reactionTypeId] FOREIGN KEY([reactionTypeId])
+REFERENCES [dbo].[reactionTypes] ([reactionTypeId])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[reactions] CHECK CONSTRAINT [FK_reactions_reactionTypes_reactionTypeId]
+GO
+ALTER TABLE [dbo].[reactions]  WITH CHECK ADD  CONSTRAINT [FK_reactions_users_userId] FOREIGN KEY([userId])
+REFERENCES [dbo].[users] ([userId])
+GO
+ALTER TABLE [dbo].[reactions] CHECK CONSTRAINT [FK_reactions_users_userId]
+GO
+ALTER TABLE [dbo].[userFollows]  WITH CHECK ADD  CONSTRAINT [FK_userFollows_users_followerId] FOREIGN KEY([followerId])
+REFERENCES [dbo].[users] ([userId])
+GO
+ALTER TABLE [dbo].[userFollows] CHECK CONSTRAINT [FK_userFollows_users_followerId]
+GO
+ALTER TABLE [dbo].[userFollows]  WITH CHECK ADD  CONSTRAINT [FK_userFollows_users_followingId] FOREIGN KEY([followingId])
+REFERENCES [dbo].[users] ([userId])
+GO
+ALTER TABLE [dbo].[userFollows] CHECK CONSTRAINT [FK_userFollows_users_followingId]
+GO
+USE [master]
+GO
+ALTER DATABASE [Post] SET  READ_WRITE 
+GO
