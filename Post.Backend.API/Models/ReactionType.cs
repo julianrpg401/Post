@@ -13,6 +13,6 @@ namespace Backend.API.Models
         [MaxLength(500)]
         public string IconUrl { get; set; }
 
-        public ICollection<Reaction> Reactions { get; set; }
+        public ICollection<Reaction>? Reactions { get; set; }
     }
 }
