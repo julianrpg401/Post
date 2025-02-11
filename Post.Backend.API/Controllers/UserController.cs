@@ -14,8 +14,8 @@ namespace Backend.API.Controllers
             _postDbContext = postDbContext;
         }
 
-        //[HttpPost]
-        //[Route("CreateUser")]
+        [HttpPost]
+        [Route("CreateUser")]
         public IActionResult CreateUser(User user)
         {
             _postDbContext.Users.Add(user);
